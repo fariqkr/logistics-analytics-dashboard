@@ -1,5 +1,13 @@
 # AI-Powered Logistics Analytics Dashboard
 
+**🔗 Live demo: https://logistics-analytics-dashboard-six.vercel.app/**
+&nbsp;·&nbsp; [Dashboard](https://logistics-analytics-dashboard-six.vercel.app/)
+&nbsp;·&nbsp; [Ask AI](https://logistics-analytics-dashboard-six.vercel.app/chat)
+
+> No setup needed — the dashboard works immediately; the **Ask AI** page is wired to the
+> Anthropic API on the server. Try the example chips, e.g. *"Which carrier has the highest
+> delay rate?"* or *"Forecast demand for PAINT for the next 3 months."*
+
 A logistics analytics app over one read-only dataset (400 orders) with two interfaces:
 
 1. **Descriptive dashboard** (`/`) — KPI cards + charts, all computed deterministically.
@@ -405,11 +413,20 @@ number is validated with `npm test` alone — no API key required.
 
 ## Deployment
 
-Deploys to any Node host. For **Vercel**:
+**Live at https://logistics-analytics-dashboard-six.vercel.app/** (Vercel, auto-deploys on
+push to `main`).
+
+To deploy your own copy on **Vercel**:
 
 1. Push to GitHub and import the repo (auto-detected as Next.js).
-2. Add `ANTHROPIC_API_KEY` in the project's environment variables.
+2. Add `ANTHROPIC_API_KEY` in the project's environment variables (Production + Preview).
 3. Deploy. The CSV ships in `data/`, so there's nothing else to provision.
+
+One deployment detail worth noting: the `/api/query` serverless function reads the CSV from
+disk at runtime, and Vercel's file tracer doesn't follow that dynamic read — so
+[`next.config.mjs`](next.config.mjs) uses `outputFileTracingIncludes` to bundle the CSV into
+the functions that need it. Without that, the dashboard (static) still works but `/chat`
+would 500 in production.
 
 There's no auth, so reviewers need no credentials.
 
